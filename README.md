@@ -27,15 +27,24 @@ http://localhost:8080/swagger-ui/index.html
 ## Capturas Swagger
 
 ### Modelo de datos (Schema)
-![Schema](docs/Schema.png)
+<p align="center">
+  <img src="docs/Schema.png" width="600"/>
+</p>
 
-### Pruebas de endpoints (Códigos de respuesta)
-![Codigos](docs/Codigos.png)
+### Prueba exitosa (201 Created)
+<p align="center">
+  <img src="docs/Codigos.png" width="600"/>
+</p>
+
+### Manejo de errores (400 / 500)
+<p align="center">
+  <img src="docs/Error.png" width="600"/>
+</p>
 
 ## Pruebas realizadas
 - Creación de receta (201 Created)
 - Consulta de recetas (200 OK)
-- Manejo de errores (400 / 404)
+- Manejo de errores (400 / 500)
 
 ## Ejecución
 ```bash
