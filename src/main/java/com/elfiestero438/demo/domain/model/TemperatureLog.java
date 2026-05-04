@@ -21,7 +21,7 @@ public class TemperatureLog {
     private YogurtBatch batch;
     
     @Column(nullable = false)
-    private Double temperature; // °C
+    private Double temperature; 
     
     @Column(nullable = false)
     private LocalDateTime recordedAt;

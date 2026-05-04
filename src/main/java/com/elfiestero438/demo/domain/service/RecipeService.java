@@ -45,7 +45,6 @@ public class RecipeService {
             .active(true)
             .build();
         
-        // Agregar ingredientes
         if (recipeDTO.getIngredients() != null) {
             recipeDTO.getIngredients().forEach(ingredientDTO -> {
                 Ingredient ingredient = Ingredient.builder()
@@ -84,7 +83,6 @@ public class RecipeService {
         recipe.setDifficulty(recipeDTO.getDifficulty());
         recipe.setTips(recipeDTO.getTips());
         
-        // Actualizar ingredientes (simplificado - en producción se manejaría mejor)
         recipe.getIngredients().clear();
         if (recipeDTO.getIngredients() != null) {
             recipeDTO.getIngredients().forEach(ingredientDTO -> {

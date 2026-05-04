@@ -35,16 +35,16 @@ public class YogurtBatch {
     private BatchStatus status;
     
     @Column(nullable = false)
-    private Double milkVolume; // en litros
+    private Double milkVolume; 
     
     @Column(nullable = false)
-    private Double starterAmount; // en cucharadas
+    private Double starterAmount; 
     
     @Column(nullable = false)
-    private Double targetTemperature; // temperatura objetivo en °C
+    private Double targetTemperature; 
     
     @Column(nullable = false)
-    private Integer incubationTime; // tiempo en horas
+    private Integer incubationTime; 
     
     private LocalDateTime startTime;
     private LocalDateTime incubationStartTime;

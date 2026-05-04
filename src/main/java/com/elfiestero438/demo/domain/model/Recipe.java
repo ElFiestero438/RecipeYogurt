@@ -31,31 +31,31 @@ public class Recipe {
     private List<Ingredient> ingredients = new ArrayList<>();
     
     @Column(nullable = false)
-    private Double defaultMilkVolume; // litros
+    private Double defaultMilkVolume; 
     
     @Column(nullable = false)
-    private Double defaultStarterAmount; // cucharadas
+    private Double defaultStarterAmount; 
     
     @Column(nullable = false)
-    private Double heatingTemperature; // °C
+    private Double heatingTemperature; 
     
     @Column(nullable = false)
-    private Integer heatingDuration; // minutos a temperatura objetivo
+    private Integer heatingDuration; 
     
     @Column(nullable = false)
-    private Double inoculationTemperature; // °C
+    private Double inoculationTemperature; 
     
     @Column(nullable = false)
-    private Double incubationTemperature; // °C
+    private Double incubationTemperature; 
     
     @Column(nullable = false)
-    private Integer minIncubationTime; // horas
+    private Integer minIncubationTime; 
     
     @Column(nullable = false)
-    private Integer maxIncubationTime; // horas
+    private Integer maxIncubationTime; 
     
     @Column(nullable = false)
-    private Integer refrigerationTime; // horas
+    private Integer refrigerationTime; 
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

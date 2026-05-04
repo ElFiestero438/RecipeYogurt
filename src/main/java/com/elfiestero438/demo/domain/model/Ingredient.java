@@ -22,11 +22,11 @@ public class Ingredient {
     
     private Double quantity;
     
-    private String unit; // kg, g, ml, cucharadas, etc.
+    private String unit; 
     
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
-    @JsonIgnore // 🔥 EVITA el error 500 (loop infinito)
+    @JsonIgnore 
     private Recipe recipe;
     
     private String notes;
