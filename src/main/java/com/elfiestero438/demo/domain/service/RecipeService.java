@@ -1,135 +1,103 @@
 package com.elfiestero438.demo.domain.service;
 
-import java.util.List;
-
+import com.elfiestero438.demo.domain.model.Recipe;
+import com.elfiestero438.demo.domain.model.Ingredient;
+import com.elfiestero438.demo.dto.RecipeDTO;
+import com.elfiestero438.demo.dto.IngredientDTO;
+import com.elfiestero438.demo.domain.repository.RecipeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.elfiestero438.demo.domain.model.Ingredient;
-import com.elfiestero438.demo.domain.model.Recipe;
-import com.elfiestero438.demo.domain.repository.RecipeRepository;
-import com.elfiestero438.demo.dto.RecipeDTO;
-
-import com.elfiestero438.demo.exception.BusinessException;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class RecipeService {
-    
+
     private final RecipeRepository recipeRepository;
-    
-    @Transactional
+
     public Recipe createRecipe(RecipeDTO recipeDTO) {
-        if (recipeRepository.findByName(recipeDTO.getName()).isPresent()) {
-            throw new BusinessException("Recipe with name '" + recipeDTO.getName() + "' already exists");
-        }
-        
         Recipe recipe = Recipe.builder()
-            .name(recipeDTO.getName())
-            .description(recipeDTO.getDescription())
-            .defaultMilkVolume(recipeDTO.getDefaultMilkVolume())
-            .defaultStarterAmount(recipeDTO.getDefaultStarterAmount())
-            .heatingTemperature(recipeDTO.getHeatingTemperature())
-            .heatingDuration(recipeDTO.getHeatingDuration())
-            .inoculationTemperature(recipeDTO.getInoculationTemperature())
-            .incubationTemperature(recipeDTO.getIncubationTemperature())
-            .minIncubationTime(recipeDTO.getMinIncubationTime())
-            .maxIncubationTime(recipeDTO.getMaxIncubationTime())
-            .refrigerationTime(recipeDTO.getRefrigerationTime())
-            .difficulty(recipeDTO.getDifficulty())
-            .tips(recipeDTO.getTips())
-            .active(true)
-            .build();
-        
+                .name(recipeDTO.getName())
+                .description(recipeDTO.getDescription())
+                .defaultMilkVolume(recipeDTO.getDefaultMilkVolume())
+                .defaultStarterAmount(recipeDTO.getDefaultStarterAmount())
+                .heatingTemperature(recipeDTO.getHeatingTemperature())
+                .heatingDuration(recipeDTO.getHeatingDuration())
+                .incubationTemperature(recipeDTO.getIncubationTemperature())
+                .incubationDuration(recipeDTO.getIncubationDuration())
+                .minIncubationTime(recipeDTO.getMinIncubationTime())
+                .maxIncubationTime(recipeDTO.getMaxIncubationTime())
+                .refrigerationTime(recipeDTO.getRefrigerationTime())
+                .difficulty(recipeDTO.getDifficulty())
+                .tips(recipeDTO.getTips())
+                .ingredients(new ArrayList<>())
+                .active(true)
+                .build();
+
         if (recipeDTO.getIngredients() != null) {
-            recipeDTO.getIngredients().forEach(ingredientDTO -> {
+            for (IngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
                 Ingredient ingredient = Ingredient.builder()
-                    .name(ingredientDTO.getName())
-                    .quantity(ingredientDTO.getQuantity())
-                    .unit(ingredientDTO.getUnit())
-                    .notes(ingredientDTO.getNotes())
-                    .optional(ingredientDTO.getOptional())
-                    .recipe(recipe)
-                    .build();
+                        .name(ingredientDTO.getName())
+                        .quantity(ingredientDTO.getQuantity())
+                        .unit(ingredientDTO.getUnit())
+                        .notes(ingredientDTO.getNotes())
+                        .optional(ingredientDTO.getOptional() != null ? ingredientDTO.getOptional() : false)
+                        .recipe(recipe)
+                        .build();
                 recipe.getIngredients().add(ingredient);
-            });
+            }
         }
-        
-        Recipe savedRecipe = recipeRepository.save(recipe);
-        log.info("Recipe created: {}", savedRecipe.getName());
-        
-        return savedRecipe;
+
+        return recipeRepository.save(recipe);
     }
-    
-    @Transactional
-    public Recipe updateRecipe(Long id, RecipeDTO recipeDTO) {
-        Recipe recipe = getRecipe(id);
-        
-        recipe.setName(recipeDTO.getName());
-        recipe.setDescription(recipeDTO.getDescription());
-        recipe.setDefaultMilkVolume(recipeDTO.getDefaultMilkVolume());
-        recipe.setDefaultStarterAmount(recipeDTO.getDefaultStarterAmount());
-        recipe.setHeatingTemperature(recipeDTO.getHeatingTemperature());
-        recipe.setHeatingDuration(recipeDTO.getHeatingDuration());
-        recipe.setInoculationTemperature(recipeDTO.getInoculationTemperature());
-        recipe.setIncubationTemperature(recipeDTO.getIncubationTemperature());
-        recipe.setMinIncubationTime(recipeDTO.getMinIncubationTime());
-        recipe.setMaxIncubationTime(recipeDTO.getMaxIncubationTime());
-        recipe.setRefrigerationTime(recipeDTO.getRefrigerationTime());
-        recipe.setDifficulty(recipeDTO.getDifficulty());
-        recipe.setTips(recipeDTO.getTips());
-        
-        recipe.getIngredients().clear();
-        if (recipeDTO.getIngredients() != null) {
-            recipeDTO.getIngredients().forEach(ingredientDTO -> {
-                Ingredient ingredient = Ingredient.builder()
-                    .name(ingredientDTO.getName())
-                    .quantity(ingredientDTO.getQuantity())
-                    .unit(ingredientDTO.getUnit())
-                    .notes(ingredientDTO.getNotes())
-                    .optional(ingredientDTO.getOptional())
-                    .recipe(recipe)
-                    .build();
-                recipe.getIngredients().add(ingredient);
-            });
-        }
-        
-        Recipe updatedRecipe = recipeRepository.save(recipe);
-        log.info("Recipe updated: {}", updatedRecipe.getName());
-        
-        return updatedRecipe;
+
+    public Recipe updateRecipe(Long id, RecipeDTO dto) {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow();
+
+        recipe.setName(dto.getName());
+        recipe.setDescription(dto.getDescription());
+        recipe.setDefaultMilkVolume(dto.getDefaultMilkVolume());
+        recipe.setDefaultStarterAmount(dto.getDefaultStarterAmount());
+        recipe.setHeatingTemperature(dto.getHeatingTemperature());
+        recipe.setHeatingDuration(dto.getHeatingDuration());
+        recipe.setIncubationTemperature(dto.getIncubationTemperature());
+        recipe.setIncubationDuration(dto.getIncubationDuration());
+        recipe.setMinIncubationTime(dto.getMinIncubationTime());
+        recipe.setMaxIncubationTime(dto.getMaxIncubationTime());
+        recipe.setRefrigerationTime(dto.getRefrigerationTime());
+        recipe.setDifficulty(dto.getDifficulty());
+        recipe.setTips(dto.getTips());
+
+        return recipeRepository.save(recipe);
     }
-    
+
     public Recipe getRecipe(Long id) {
-        return recipeRepository.findById(id)
-            .orElseThrow(() -> new BusinessException("Recipe not found with id: " + id));
+        return recipeRepository.findById(id).orElseThrow();
     }
-    
+
     public List<Recipe> getAllActiveRecipes() {
-        return recipeRepository.findByActive(true);
+        return recipeRepository.findAll().stream()
+                .filter(Recipe::getActive)
+                .toList();
     }
-    
+
     public List<Recipe> searchRecipes(String keyword) {
-        return recipeRepository.searchByKeyword(keyword);
+        return recipeRepository.findAll().stream()
+                .filter(r -> r.getName().toLowerCase().contains(keyword.toLowerCase()))
+                .toList();
     }
-    
-    @Transactional
+
     public void deactivateRecipe(Long id) {
-        Recipe recipe = getRecipe(id);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow();
         recipe.setActive(false);
         recipeRepository.save(recipe);
-        log.info("Recipe deactivated: {}", recipe.getName());
     }
-    
-    @Transactional
+
     public void activateRecipe(Long id) {
-        Recipe recipe = getRecipe(id);
+        Recipe recipe = recipeRepository.findById(id).orElseThrow();
         recipe.setActive(true);
         recipeRepository.save(recipe);
-        log.info("Recipe activated: {}", recipe.getName());
     }
 }

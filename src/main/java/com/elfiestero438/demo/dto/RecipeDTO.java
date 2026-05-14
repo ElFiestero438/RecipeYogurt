@@ -42,6 +42,9 @@ public class RecipeDTO {
     @Schema(description = "Temperatura de incubación en °C", example = "42")
     private Double incubationTemperature;
 
+    @Schema(description = "Duración de la incubación en horas", example = "6")
+    private Integer incubationDuration;
+
     @Schema(description = "Tiempo mínimo de incubación en horas", example = "6")
     private Integer minIncubationTime;
 
